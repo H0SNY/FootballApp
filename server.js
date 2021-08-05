@@ -44,7 +44,9 @@ try{
 	app.use(express.json());
 	app.use(cors());
 	startConncection(uri);
-
+	app.get('./' , function(req , res){
+		res.send('Welcome');
+	});
 	app.use('/league' , leagueRoute);
 	app.use('/team' , teamRoute);
 	app.use('/standing' , standingRoute);
