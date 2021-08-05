@@ -1,0 +1,11 @@
+Pleayer {
+		id , 
+		name , 
+		position , 
+		dateOfBirth , 
+		countryOfBirth , 
+		nationality , 
+		shirtNumber , 
+		role
+
+}

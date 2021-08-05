@@ -1,0 +1,51 @@
+Match{7ujk
+	id , 
+	season : {
+			id , 
+			startDate , 
+			endDate
+		},
+	
+	utcDate , 
+	status , //string either "FINISHED" or "SCHEDULED"
+	stage , 
+	group , //its null if its a league , a number if its a cup
+	score : {
+			winner ,//null if match is SCHEDULED
+			duration , // 'REGULAR' if there is no extra time 
+			fullTime : {
+					homeTeam , 
+					awayTeam
+				} , 
+			halfTime : {
+					homeTeam , 
+					awayTeam
+				},		
+			
+			extraTime : {
+					homeTeam , 
+					awayTeam
+				
+				} , 
+			penalties: {
+					homeTeam , 
+					awayTeam
+				
+				}
+		} , 
+	
+	homeTeam : {
+			id , 
+			name
+		
+		} , 
+
+	awayTeam: {
+			id , 
+			name
+		
+		}
+	
+	referees : [] 
+
+}

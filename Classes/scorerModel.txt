@@ -1,0 +1,23 @@
+Scorer{
+	
+	player : {
+			id ,
+			name , 
+			firstName , 
+			lastName,
+			countryOfBirth , 
+			nationality , 
+			position , 
+			shirtNumber , 
+			dateOfBirth , 
+
+	} , 
+	team : {
+			id , 
+			name
+
+		} , 
+
+	numberOfGoals
+
+}

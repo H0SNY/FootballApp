@@ -1,0 +1,19 @@
+Standing{
+		position , 
+		team : {
+				id , 
+				name , 
+				crestUrl
+			},
+		playedGames , 
+		form , 
+		won , 
+		lost , 
+		draw ,
+		points , 
+		goalsFor , 
+		goalsAgainst , 
+		goalDifference
+
+
+}

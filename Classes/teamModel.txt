@@ -1,0 +1,23 @@
+Team : {
+		id , 
+		area : {
+				id , 
+				name
+			} , 
+		name , 
+		shortName , 
+		tla , //appreviation of team name
+		crestUrl , 
+		address , 
+		phone , 
+		website , 
+		email , 
+		founded , 
+		clubColors , 
+		venue , 
+		activeCompetitions , //arr of leagues
+		lastUpdated , 
+		squad , //arr of players
+		
+
+}
