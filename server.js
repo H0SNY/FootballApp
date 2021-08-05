@@ -35,7 +35,7 @@ const startConncection = async(uri) =>{
 }
 
 const uri = `mongodb+srv://H0SNY:HANY@test.tag54.mongodb.net/football?retryWrites=true&w=majority`;
-const port = process.env.port || 3000;
+const port =  8080;
 
 
 try{
