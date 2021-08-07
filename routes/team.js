@@ -1,26 +1,32 @@
 import axios from 'axios';
 import express from 'express';
-import { options } from '../apiTokens.js';
+import {  FOOTBALL_API_OPTIONS } from '../apiTokens.js';
+import { Teams } from '../models/teams.model.js';
 
 export const teamRoute = express();
 
 
-//route to get a specific team
-//returns an object containing the team
+//get team by id
 teamRoute.route('/').get(async (req , res) =>{
 	try{
-		const id = req.query.id;
-		console.log(id);
-		const team = await axios(`https://api.football-data.org/v2/teams/${id}` , options);
-		console.log(team)
-		res.json(team.data);
-	}catch(err){
-		try{
-			throw new Error(`${err.message} ,failed to fetch team`);
+		const {leagueID , teamID} = req.query;
+		console.log('league id : ' , leagueID , 'team id : ' , teamID);
+		const teams = await Teams.find({leagueID : leagueID});
+		console.log('First League Teams Found : ' , teams);
+		let myTeam;
+		for(const team of teams.teams){
+			if(team.id === teamID){
+				myTeam = team;
+				break;
+			}
+		} 
 
-		}catch(err){
-			console.log(`${err.message} , team.js/`);
-		}
+
+		console.log('Found team : ' , myTeam)
+		res.json({team : myTeam});
+	}catch(err){
+		console.error(err.message , 'team.js/getteam');
+		res.json({err : err , msg : 'Failed To Find Team'});
 	}
 
 });

@@ -28,12 +28,7 @@ const leagueSchema = mongoose.Schema({
 	currentSeasonEnd : {
 		type : String , 
 
-	} , 
-	standings : [Object] ,
-
-	matches :  [Object],
-
-	scorers :  [Object]
+	} 
 });
 
 export const League = mongoose.model('leagues' , leagueSchema);

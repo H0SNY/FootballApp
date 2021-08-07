@@ -7,7 +7,7 @@ import { standingRoute } from './routes/standing.js';
 import {matchesRoute} from './routes/matches.js'
 import { scorersRoute } from './routes/scorers.js';
 import { teamsRoute } from './routes/teams.js';
-
+import { updateRoute } from './routes/update.js';
 //get status : {
 //	err , present if there was an error and sent back
 //	(data) null if there wasnt ant=y thing to find , name of the data if present
@@ -53,6 +53,7 @@ try{
 	app.use('/matches' , matchesRoute);
 	app.use('/scorers' , scorersRoute);
 	app.use('/teams' , teamsRoute);
+	app.use('/update' , updateRoute);
 
 	app.listen(port , () => console.log(`Listening on ${port}`))
 

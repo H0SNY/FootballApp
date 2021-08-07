@@ -23,23 +23,6 @@ leagueRoute.route('/').get(async (req , res) =>{
 });
 
 
-//post to db
-leagueRoute.route('/add').post(async (req , res) =>{
-	try{
-		let {league} = req.query;
-		league = JSON.parse(league); //json string ===> league object
-		const l = new League(league);
-		const response = await l.save((err , le) =>{
-			if(err)throw new Error(err);
-			res.json({msg : 'Document Updated'});
-		});
-	}catch(err){
-		console.error(`${err.message} , league.js/add`);
-		res.json({err : err , msg : 'Failed To Update Document'});
-	}
-});
-
-
 leagueRoute.route('/all').get(async (req , res) =>{
 	try{
 		const leagues = await League.find({});
