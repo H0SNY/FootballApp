@@ -11,11 +11,11 @@ teamRoute.route('/').get(async (req , res) =>{
 	try{
 		const {leagueID , teamID} = req.query;
 		console.log('league id : ' , leagueID , 'team id : ' , teamID);
-		const teams = await Teams.find({leagueID : leagueID});
-		console.log('First League Teams Found : ' , teams);
+		const teams = await Teams.findOne({leagueID : leagueID});
+		console.log('First League Teams Found : ' , teams[0]);
 		let myTeam;
 		for(const team of teams.teams){
-			if(team.id === teamID){
+			if(Number(team.id) === Number(teamID)){
 				myTeam = team;
 				break;
 			}
