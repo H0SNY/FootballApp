@@ -17,7 +17,7 @@ const sleep  = (ms) => new Promise(resolve => setTimeout(resolve , ms));
 
 updateRoute.route('/updateteams').post(async (req , res) =>{
 	try{
-		console.log(req);
+		console.log(req.headers);
 		if(req.headers.update_token !== UPDATE_TOKEN) throw new Error('Unauthorized Request');
 		const leagues = await League.find({});
 		console.log('leagues : ' , leagues);
@@ -49,6 +49,9 @@ updateRoute.route('/updateteams').post(async (req , res) =>{
 //update matches
 updateRoute.route('/updatematches').post(async (req , res) =>{
 	try{
+		console.log(req.headers);
+		if(req.headers.update_token !== UPDATE_TOKEN) throw new Error('Unauthorized Request');
+
 		const leagues = await League.find({});
 		console.log('leagues : ' , leagues);
 		for(const league of leagues){
@@ -69,6 +72,8 @@ updateRoute.route('/updatematches').post(async (req , res) =>{
 //update scorers
 updateRoute.route('/updatescorers').post(async (req , res) =>{
 	try{
+		console.log(req.headers)
+		if(req.headers.update_token !== UPDATE_TOKEN) throw new Error('Unauthorized Request');
 		const leagues = await League.find({});
 		for(const league of leagues){
 			await sleep(2500);
@@ -91,6 +96,8 @@ updateRoute.route('/updatescorers').post(async (req , res) =>{
 //update standings
 updateRoute.route('/updatestandings').post(async (req , res) =>{
 	try{
+		console.log(req.headers);
+		if(req.headers.update_token !== UPDATE_TOKEN) throw new Error('Unauthorized Request');
 		const leagues = await League.find({});
 		for(const league of leagues){
 			await sleep(2500);
@@ -101,8 +108,33 @@ updateRoute.route('/updatestandings').post(async (req , res) =>{
 		}
 		res.json({msg : 'updated'});
 	}catch(err){
-		console.error(err.message , 'teams.js/addsquad');
+		console.error(err.message , 'teams.js/updatestanding');
 		res.json({err : err , msg : 'Failed To Update'});
 
+	}
+});
+
+//update photos of teams in matches
+updateRoute.route('/updateteamspictures').post(async (req , res) =>{
+	try{
+		console.log(req.headers);
+		if(req.headers.update_token !== UPDATE_TOKEN) throw new Error('Unauthorized Request');
+		let matches = await Matches.find({});
+		const newMatches = [];
+		for(const match of matches.matches){
+			const homeTeam = await Teams.findOne({"teams.id" : match.homeTeam.id});
+			console.log('home team : ' , homeTeam);
+			const awayTeam = await Teams.findOne({"teams.id" : match.awayTeam.id});
+			console.log('away team : ' , awayTeam);
+			match.homeTeam.logo = homeTeam.crestUrl;
+			match.awayTeam.logo = awayTeam.crestUrl;
+			newMatches.push(match);
+		}
+
+
+		const dbResponse = Matches.up
+	}catch(err){
+		console.error(err.message , 'teams.js/updateteamspicture');
+		res.json({err : err , msg : 'Failed To Update'});
 	}
 });
