@@ -26,7 +26,7 @@ const startConncection = async(uri) =>{
 }
 
 const uri = `mongodb+srv://H0SNY:HANY@test.tag54.mongodb.net/football?retryWrites=true&w=majority`;
-const port =  8080;
+const port =  process.env.PORT || 8080;
 
 
 try{
@@ -34,7 +34,7 @@ try{
 	app.use(express.urlencoded({extended : true}));
 	app.use(express.json());
 	app.use(cors({
-		origin : ['http://footballapp.us-east-2.elasticbeanstalk.com' , 'http://H0SNY.us-east-2.elasticbeanstalk.com']
+		origin : ['http://footballapp.us-east-2.elasticbeanstalk.com' ]
 	}));
 	startConncection(uri);
 	app.get('/' , function(req , res){
