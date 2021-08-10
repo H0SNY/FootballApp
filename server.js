@@ -8,20 +8,11 @@ import {matchesRoute} from './routes/matches.js'
 import { scorersRoute } from './routes/scorers.js';
 import { teamsRoute } from './routes/teams.js';
 import { updateRoute } from './routes/update.js';
-//get status : {
-//	err , present if there was an error and sent back
-//	(data) null if there wasnt ant=y thing to find , name of the data if present
 
-/// post{
-//	err , 
-//	msg , represents the status of the request
-//   }
-
-//get all leagues
-
-
-
-
+let corsOptions = {
+  origin: 'http://example.com',
+  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+}
 
 //function to start mongodb connection
 const startConncection = async(uri) =>{
@@ -42,10 +33,12 @@ try{
 	const app = express();
 	app.use(express.urlencoded({extended : true}));
 	app.use(express.json());
-	app.use(cors());
+	app.use(cors({
+		origin : ['http://footballapp.us-east-2.elasticbeanstalk.com' ]
+	}));
 	startConncection(uri);
 	app.get('/' , function(req , res){
-		res.send('Welcome');
+		res.send('Hello There');
 	});
 	app.use('/league' , leagueRoute);
 	app.use('/team' , teamRoute);
