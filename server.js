@@ -9,10 +9,9 @@ import { scorersRoute } from './routes/scorers.js';
 import { teamsRoute } from './routes/teams.js';
 import { updateRoute } from './routes/update.js';
 
-let corsOptions = {
-  origin: 'http://example.com',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
+
+
+
 
 //function to start mongodb connection
 const startConncection = async(uri) =>{
@@ -34,7 +33,7 @@ try{
 	app.use(express.urlencoded({extended : true}));
 	app.use(express.json());
 	app.use(cors({
-		origin : ['http://footballapp.us-east-2.elasticbeanstalk.com' ]
+		origin : true
 	}));
 	startConncection(uri);
 	app.get('/' , function(req , res){
