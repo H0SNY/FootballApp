@@ -34,7 +34,7 @@ try{
 	app.use(express.urlencoded({extended : true}));
 	app.use(express.json());
 	app.use(cors({
-		origin : ['http://footballapp.us-east-2.elasticbeanstalk.com' , 'http://localhost:3000']
+		origin : ['http://footballapp.us-east-2.elasticbeanstalk.com' , 'http://H0SNY.us-east-2.elasticbeanstalk.com']
 	}));
 	startConncection(uri);
 	app.get('/' , function(req , res){
