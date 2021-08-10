@@ -32,9 +32,7 @@ try{
 	const app = express();
 	app.use(express.urlencoded({extended : true}));
 	app.use(express.json());
-	app.use(cors({
-		origin : true
-	}));
+	app.use(cors());
 	startConncection(uri);
 	app.get('/' , function(req , res){
 		res.send('Hello There');
