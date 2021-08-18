@@ -31,6 +31,15 @@ cron.schedule('0 */1 * * *' , async function(){
 	console.log(res);
 	
 });
+cron.schedule('0 */1 * * *' , async function(){
+	const res = await axios.post('http://h0sny.us-east-2.elasticbeanstalk.com/update/updatematches' , null , {
+		headers : {
+			'update_token' : process.env.update_token
+		}
+	});
+	console.log(res);
+	
+});
 
 
 cron.schedule('0 */1 * * *' , async function(){
