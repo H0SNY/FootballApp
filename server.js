@@ -1,6 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv'
+import axios from 'axios';
+import cron from 'node-cron'
 import { leagueRoute } from './routes/league.js';
 import { teamRoute } from './routes/team.js';
 import { standingRoute } from './routes/standing.js';
@@ -8,6 +11,37 @@ import {matchesRoute} from './routes/matches.js'
 import { scorersRoute } from './routes/scorers.js';
 import { teamsRoute } from './routes/teams.js';
 import { updateRoute } from './routes/update.js';
+dotenv.config();
+
+cron.schedule('0 */1 * * *' , async function(){
+	const res = await axios.post('http://h0sny.us-east-2.elasticbeanstalk.com/update/updateteams', null ,{
+		headers : {
+			'update_token' : process.env.update_token
+		}
+	});
+	console.log(res);
+	
+});
+cron.schedule('0 */1 * * *' , async function(){
+	const res = await axios.post('http://h0sny.us-east-2.elasticbeanstalk.com/update/updatescorers' , null , {
+		headers : {
+			'update_token' : process.env.update_token
+		}
+	});
+	console.log(res);
+	
+});
+
+
+cron.schedule('0 */1 * * *' , async function(){
+	const res = await axios.post('http://h0sny.us-east-2.elasticbeanstalk.com/update/updatestandings' ,null , {
+		headers : {
+			'update_token' : process.env.update_token
+		}
+	});
+	console.log(res);
+	
+});
 
 
 
@@ -32,7 +66,9 @@ try{
 	const app = express();
 	app.use(express.urlencoded({extended : true}));
 	app.use(express.json());
-	app.use(cors());
+	app.use(cors({
+		origin : 'http://footballapp.us-east-2.elasticbeanstalk.com'
+	}));
 	startConncection(uri);
 	app.get('/' , function(req , res){
 		res.send('Hello There');

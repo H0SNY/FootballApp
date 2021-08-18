@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const standingSchema = mongoose.Schema({
 	leagueID : Number , 
-	standings : []
+	standings : [{}]
 }
 );
 
