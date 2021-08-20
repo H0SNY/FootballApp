@@ -10,7 +10,6 @@ export const teamRoute = express();
 teamRoute.route('/').get(async (req , res) =>{
 	try{
 		const {leagueID , teamID} = req.query;
-		console.log('league id : ' , leagueID , 'team id : ' , teamID);
 		const teams = await Teams.findOne({leagueID : leagueID});
 		console.log('First League Teams Found : ' , teams[0]);
 		let myTeam;
@@ -20,13 +19,31 @@ teamRoute.route('/').get(async (req , res) =>{
 				break;
 			}
 		} 
-
-
-		console.log('Found team : ' , myTeam)
 		res.json({team : myTeam});
 	}catch(err){
 		console.error(err.message , 'team.js/getteam');
 		res.json({err : err , msg : 'Failed To Find Team'});
 	}
 
+});
+
+
+//get team picture
+teamRoute.route('/img').get(async (req , res) =>{
+	try{
+		const {leagueID , teamID} = req.query;
+		const teams = await Teams.findOne({leagueID : leagueID});
+		if(!teams) throw new Error('Team Not Found');
+		let img;
+		for(const team of teams.teams){
+			if(Number(team.id) === Number(teamID)){
+				img = team.crestUrl;
+				break;
+			}
+		}
+		res.status(200).json({valid : true , img : img})
+	}catch(err){
+		console.error(err.message , 'team.js/img');
+		res.json({err : err , msg : 'Failed To Find Img'});
+	}
 });

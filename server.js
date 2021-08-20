@@ -2,8 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv'
-import axios from 'axios';
-import cron from 'node-cron'
 import { leagueRoute } from './routes/league.js';
 import { teamRoute } from './routes/team.js';
 import { standingRoute } from './routes/standing.js';
@@ -11,55 +9,18 @@ import {matchesRoute} from './routes/matches.js'
 import { scorersRoute } from './routes/scorers.js';
 import { teamsRoute } from './routes/teams.js';
 import { updateRoute } from './routes/update.js';
+import {updateMatches , updateStandings , updateScorers , updateTeams} from './cron.js';
 dotenv.config();
-
-cron.schedule('0 */1 * * *' , async function(){
-	const res = await axios.post('http://h0sny.us-east-2.elasticbeanstalk.com/update/updateteams', null ,{
-		headers : {
-			'update_token' : process.env.update_token
-		}
-	});
-	console.log(res);
-	
-});
-cron.schedule('0 */1 * * *' , async function(){
-	const res = await axios.post('http://h0sny.us-east-2.elasticbeanstalk.com/update/updatescorers' , null , {
-		headers : {
-			'update_token' : process.env.update_token
-		}
-	});
-	console.log(res);
-	
-});
-cron.schedule('0 */1 * * *' , async function(){
-	const res = await axios.post('http://h0sny.us-east-2.elasticbeanstalk.com/update/updatematches' , null , {
-		headers : {
-			'update_token' : process.env.update_token
-		}
-	});
-	console.log(res);
-	
-});
-
-
-cron.schedule('0 */1 * * *' , async function(){
-	const res = await axios.post('http://h0sny.us-east-2.elasticbeanstalk.com/update/updatestandings' ,null , {
-		headers : {
-			'update_token' : process.env.update_token
-		}
-	});
-	console.log(res);
-	
-});
-
-
-
+updateStandings();
+updateTeams();
+updateScorers();
+updateMatches();
 
 
 //function to start mongodb connection
 const startConncection = async(uri) =>{
 	try{
-		await mongoose.connect(uri , {useCreateIndex : true , useNewUrlParser : true , useUnifiedTopology : true})
+		await mongoose.connect(uri , {useCreateIndex : true , useNewUrlParser : true , useUnifiedTopology : true , autoIndex : false})
 		console.log(`Connected`);
 	}catch(err){
 		console.error(`${err.message} server.js/startConnection`)
@@ -76,7 +37,7 @@ try{
 	app.use(express.urlencoded({extended : true}));
 	app.use(express.json());
 	app.use(cors({
-		origin : 'http://footballapp.us-east-2.elasticbeanstalk.com'
+		origin : ['http://localhost:3000' , 'http://footballapp.us-east-2.elasticbeanstalk.com']
 	}));
 	startConncection(uri);
 	app.get('/' , function(req , res){
