@@ -30,15 +30,12 @@ updateRoute.route('/updateteams').post(async (req , res) =>{
 					"$set" : {"teams.$" : team}
 				});
 
-				console.log('db: ' , dbResponse);
 				await sleep(5000);
 			}
 			
 		}
 		console.log('finished updating teams')
-
-
-		res.json({msg : 'done succesfully'});
+		res.json({msg : 'Updated' , valid : true});
 	}catch(err){
 		console.error(err.message , 'teams.js/addsquad');
 		res.json({err : err.message , msg : 'Failed To Update'});
@@ -60,7 +57,7 @@ updateRoute.route('/updatematches').post(async (req , res) =>{
 			await sleep(3000);
 		}
 		console.log('finished updating matches')
-		res.json({msg : 'Updated'});
+		res.json({msg : 'Updated' , valid : true});
 	}catch(err){
 		console.error(err.message , 'teams.js/addsquad');
 		res.json({err : err , msg : 'Failed To Update'});
@@ -70,9 +67,9 @@ updateRoute.route('/updatematches').post(async (req , res) =>{
 //update scorers
 updateRoute.route('/updatescorers').post(async (req , res) =>{
 	try{
-		console.log('updating scorers....')
 		if(req.headers.update_token !== process.env.UPDATE_TOKEN) throw new Error('Unauthorized Request');
 		const leagues = await League.find({});
+		console.log('updating scorers....')
 		for(const league of leagues){
 			await sleep(3000);
 			const apiResponse = await axios.get(process.env.FOOTBALL_API_URI + `/v2/competitions/${league.id}/scorers`, FOOTBALL_API_OPTIONS);
@@ -80,8 +77,7 @@ updateRoute.route('/updatescorers').post(async (req , res) =>{
 			await sleep(3000);
 		}
 		console.log('finished updating scorers')
-
-		res.json({msg : 'Updated'});
+		res.json({msg : 'Updated' , valid : true});
 	}catch(err){
 		console.error(err.message , 'teams.js/addsquad');
 		res.json({err : err , msg : 'Failed To Update'});
@@ -93,9 +89,9 @@ updateRoute.route('/updatescorers').post(async (req , res) =>{
 //update standings
 updateRoute.route('/updatestandings').post(async (req , res) =>{
 	try{
-		console.log('updating standings.....');
 		if(req.headers.update_token !== process.env.UPDATE_TOKEN) throw new Error('Unauthorized Request');
 		const leagues = await League.find({});
+		console.log('updating standings.....');
 		for(const league of leagues){
 			await sleep(5000);
 			if(league.id == 2000)continue;
@@ -103,7 +99,7 @@ updateRoute.route('/updatestandings').post(async (req , res) =>{
 			const dbResponse = Standing.updateOne({leagueID : league.id} , {$set : { standings : apiResponse.data.standings[0] } } );
 		}
 		console.log('finsihed updating standings')
-		res.json({msg : 'updated'});
+		res.json({msg : 'updated' , valid : true});
 	}catch(err){
 		console.error(err.message , 'teams.js/updatestanding');
 		res.json({err : err , msg : 'Failed To Update'});

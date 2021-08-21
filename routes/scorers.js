@@ -9,7 +9,6 @@ scorersRoute.route('/').get(async (req , res) =>{
 		const {id} = req.query;
 		const scorers = await Scorers.findOne({leagueID : {$eq : id}});
 		res.json({scorers : scorers.scorers})
-		console.log(`${id} fetched succesfully , get scorers`);
 	}catch(err){
 		console.error(` ${err.message} , scorers.js/get`);
 		res.json({err : err , scorers : null});

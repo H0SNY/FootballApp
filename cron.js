@@ -8,7 +8,6 @@ export function updateTeams(){
 				'update_token' : process.env.update_token
 			}
 		});
-		console.log(res);
 		
 	}))
 }
@@ -19,7 +18,6 @@ export function updateScorers(){
 				'update_token' : process.env.update_token
 			}
 		});
-		console.log(res);
 		
 	}))
 }
@@ -30,7 +28,6 @@ export function updateMatches(){
 			'update_token' : process.env.update_token
 		}
 	});
-	console.log(res);
 	
 }))
 
@@ -42,7 +39,6 @@ export function updateStandings(){
 				'update_token' : process.env.update_token
 			}
 		});
-		console.log(res);
 		
 	}))
 
