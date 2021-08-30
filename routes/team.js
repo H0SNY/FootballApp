@@ -1,6 +1,4 @@
-import axios from 'axios';
 import express from 'express';
-import {  FOOTBALL_API_OPTIONS } from '../apiTokens.js';
 import { Teams } from '../models/teams.model.js';
 
 export const teamRoute = express();
@@ -11,7 +9,6 @@ teamRoute.route('/').get(async (req , res) =>{
 	try{
 		const {leagueID , teamID} = req.query;
 		const teams = await Teams.findOne({leagueID : leagueID});
-		console.log('First League Teams Found : ' , teams[0]);
 		let myTeam;
 		for(const team of teams.teams){
 			if(Number(team.id) === Number(teamID)){
@@ -32,18 +29,41 @@ teamRoute.route('/').get(async (req , res) =>{
 teamRoute.route('/img').get(async (req , res) =>{
 	try{
 		const {leagueID , teamID} = req.query;
-		const teams = await Teams.findOne({leagueID : leagueID});
-		if(!teams) throw new Error('Team Not Found');
 		let img;
-		for(const team of teams.teams){
-			if(Number(team.id) === Number(teamID)){
+
+		//if league is not specified
+		if(!Number(leagueID)){
+			const teams = await Teams.find({});
+			let valid = false;
+			for(const leagueTeams of teams){
+				for(const team of leagueTeams.teams){
+					if(team.id === Number(teamID)){
+						img = team.crestUrl;
+						valid = true;
+						break;
+					}
+				}
+				if(valid) break;
+			}
+			res.status(200).json({valid : true , img : img});
+			return;
+		}
+
+		//if league is specefied
+		else{
+			const teams = await Teams.findOne({leagueID : leagueID});
+			if(!teams) throw new Error('Team Not Found');
+			for(const team of teams.teams){
+				if(Number(team.id) === Number(teamID)){
 				img = team.crestUrl;
 				break;
+				}
 			}
+			res.status(200).json({valid : true , img : img})
 		}
-		res.status(200).json({valid : true , img : img})
+		
 	}catch(err){
 		console.error(err.message , 'team.js/img');
-		res.json({err : err , msg : 'Failed To Find Img'});
+		res.json({err : err.message , msg : 'Failed To Find Img'});
 	}
 });

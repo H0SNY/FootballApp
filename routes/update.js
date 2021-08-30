@@ -26,7 +26,7 @@ updateRoute.route('/updateteams').post(async (req , res) =>{
 			for(const team of noSquadResponse.data.teams){
 
 				const squadResponse = await axios.get(process.env.FOOTBALL_API_URI + `/v2/teams/${team.id}` , FOOTBALL_API_OPTIONS);
-				const dbResponse = Teams.updateOne({leagueID : league.id , "teams.id" : team.id} , {
+				const dbResponse = await Teams.updateOne({leagueID : league.id , "teams.id" : team.id} , {
 					"$set" : {"teams.$" : team}
 				});
 
@@ -93,10 +93,10 @@ updateRoute.route('/updatestandings').post(async (req , res) =>{
 		const leagues = await League.find({});
 		console.log('updating standings.....');
 		for(const league of leagues){
-			await sleep(5000);
-			if(league.id == 2000)continue;
+			if(league.id === 2000) continue;
+			await sleep(7000);
 			const apiResponse = await axios.get(process.env.FOOTBALL_API_URI +`/v2/competitions/${league.id}/standings`, FOOTBALL_API_OPTIONS);
-			const dbResponse = Standing.updateOne({leagueID : league.id} , {$set : { standings : apiResponse.data.standings[0] } } );
+			const dbResponse = await Standing.updateOne({leagueID : league.id} , {$set : { standings : apiResponse.data.standings } } );
 		}
 		console.log('finsihed updating standings')
 		res.json({msg : 'updated' , valid : true});

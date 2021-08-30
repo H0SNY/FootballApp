@@ -12,7 +12,7 @@ export function updateTeams(){
 	}))
 }
 export function updateScorers(){
-	return(cron.schedule('0 * * * *' , async function(){
+	return(cron.schedule('10 * * * *' , async function(){
 		const res = await axios.post('http://h0sny.us-east-2.elasticbeanstalk.com/update/updatescorers' , null , {
 			headers : {
 				'update_token' : process.env.update_token
@@ -22,7 +22,7 @@ export function updateScorers(){
 	}))
 }
 export function updateMatches(){
-	return(cron.schedule('0 * * * *' , async function(){
+	return(cron.schedule('20 * * * *' , async function(){
 	const res = await axios.post('http://h0sny.us-east-2.elasticbeanstalk.com/update/updatematches' , null , {
 		headers : {
 			'update_token' : process.env.update_token
@@ -33,7 +33,7 @@ export function updateMatches(){
 
 }
 export function updateStandings(){
-	return(cron.schedule('0 * * * *' , async function(){
+	return(cron.schedule('30 * * * *' , async function(){
 		const res = await axios.post('http://h0sny.us-east-2.elasticbeanstalk.com/update/updatestandings' ,null , {
 			headers : {
 				'update_token' : process.env.update_token
