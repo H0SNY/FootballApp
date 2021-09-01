@@ -1,69 +1,52 @@
+import axios from 'axios';
 import express from 'express';
-import { Teams } from '../models/teams.model.js';
+import { options, sleep } from '../helper.js';
+import { League } from '../models/league.model.js';
+import { Team } from '../models/team.model.js';
 
 export const teamRoute = express();
 
+//getters
 
 //get team by id
 teamRoute.route('/').get(async (req , res) =>{
 	try{
-		const {leagueID , teamID} = req.query;
-		const teams = await Teams.findOne({leagueID : leagueID});
-		let myTeam;
-		for(const team of teams.teams){
-			if(Number(team.id) === Number(teamID)){
-				myTeam = team;
-				break;
-			}
-		} 
-		res.json({team : myTeam});
+		const {teamID} = req.query;
+		const team = await Team.findOne({id : teamID});
+		if(!team) throw new Error(`team not found`)
+		res.json({team : team});
 	}catch(err){
 		console.error(err.message , 'team.js/getteam');
-		res.json({err : err , msg : 'Failed To Find Team'});
+		res.json({err : err.message});
 	}
 
 });
 
 
-//get team picture
-teamRoute.route('/img').get(async (req , res) =>{
-	try{
-		const {leagueID , teamID} = req.query;
-		let img;
 
-		//if league is not specified
-		if(!Number(leagueID)){
-			const teams = await Teams.find({});
-			let valid = false;
-			for(const leagueTeams of teams){
-				for(const team of leagueTeams.teams){
-					if(team.id === Number(teamID)){
-						img = team.crestUrl;
-						valid = true;
-						break;
-					}
-				}
-				if(valid) break;
-			}
-			res.status(200).json({valid : true , img : img});
+//setters
+teamRoute.route('/update').post(async (req , res) =>{
+	try{
+		const {update_token} = req.headers;
+		if(update_token !== process.env.UPDATE_TOKEN){
+			res.status(403).json({valid : false , err : 'Invalid Update Token'});
 			return;
 		}
-
-		//if league is specefied
-		else{
-			const teams = await Teams.findOne({leagueID : leagueID});
-			if(!teams) throw new Error('Team Not Found');
-			for(const team of teams.teams){
-				if(Number(team.id) === Number(teamID)){
-				img = team.crestUrl;
-				break;
-				}
+		const leagues = await League.find({});
+		console.log(`updating teams...`)
+		for(const league of leagues){
+			const teams = await axios.get(process.env.API_ORIGIN + `/v2/competitions/${league.id}/teams` , options);
+			await sleep(3000)
+			for(const team of teams.data.teams){
+				await sleep(8000);
+				const fullTeam = await axios.get(process.env.API_ORIGIN + `/v2/teams/${team.id}` , options);
+				const res = await Team.updateOne({id : team.id} , {$set : {...fullTeam.data}} , {upsert : true});
 			}
-			res.status(200).json({valid : true , img : img})
 		}
 		
+		console.log(`finished updating teams`)
+		res.status(200).json({valid : true})
 	}catch(err){
-		console.error(err.message , 'team.js/img');
-		res.json({err : err.message , msg : 'Failed To Find Img'});
+		res.status(403).json({err : err.message})
 	}
-});
+})

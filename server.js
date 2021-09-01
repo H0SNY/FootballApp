@@ -5,10 +5,8 @@ import dotenv from 'dotenv'
 import { leagueRoute } from './routes/league.js';
 import { teamRoute } from './routes/team.js';
 import { standingRoute } from './routes/standing.js';
-import {matchesRoute} from './routes/matches.js'
+import {matchRoute} from './routes/match.js'
 import { scorersRoute } from './routes/scorers.js';
-import { teamsRoute } from './routes/teams.js';
-import { updateRoute } from './routes/update.js';
 import {updateMatches , updateStandings , updateScorers , updateTeams} from './cron.js';
 dotenv.config();
 updateStandings();
@@ -37,7 +35,7 @@ try{
 	app.use(express.urlencoded({extended : true}));
 	app.use(express.json());
 	app.use(cors({
-		origin : ['http://localhost:3000' , 'http://footballapp.us-east-2.elasticbeanstalk.com']
+		origin : ['http://footballapp.us-east-2.elasticbeanstalk.com']
 	}));
 	startConncection(uri);
 	app.get('/' , function(req , res){
@@ -46,10 +44,8 @@ try{
 	app.use('/league' , leagueRoute);
 	app.use('/team' , teamRoute);
 	app.use('/standing' , standingRoute);
-	app.use('/matches' , matchesRoute);
+	app.use('/match' , matchRoute);
 	app.use('/scorers' , scorersRoute);
-	app.use('/teams' , teamsRoute);
-	app.use('/update' , updateRoute);
 
 	app.listen(port , () => console.log(`Listening on ${port}`))
 

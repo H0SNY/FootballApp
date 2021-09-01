@@ -1,34 +1,32 @@
 import mongoose from 'mongoose';
 
+const {Schema , model} = mongoose;
 
-const leagueSchema = mongoose.Schema({
+const leagueSchema = new Schema({
 	id : {
 		type : Number , 
-		required : true , 
-		unique : true
-	} , 
-
-	country : {
-		type : String , 
-		required : true , 
-		trim : true
-	} , 
-
-	logo : {
-		type : String , 
+		unique : [true , 'id must be unique'] , 
+		required : [true , 'id is required']
 	} ,
-
-	name : {
-		type : String , 
-		required : true , 
-	} ,
-	currentSeasonStart : {
-		type : String , 
+	area : {
+		id : Number , 
+		name : String , 
+		countryCode : String , 
+		ensignUrl : String
 	} , 
-	currentSeasonEnd : {
-		type : String , 
 
-	} 
-});
+	name : String , 
+	code : String , 
+	emblemUrl : String , 
+	logo : String ,
+	currentSeason : {
+		id : Number , 
+		startDate : String , 
+		endDate : String , 
+		currentMatchday : Number , 
+		winner : {}
+	} , 
 
-export const League = mongoose.model('leagues' , leagueSchema);
+})
+
+export const League = model('leagues' , leagueSchema);
