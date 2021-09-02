@@ -35,7 +35,7 @@ try{
 	app.use(express.urlencoded({extended : true}));
 	app.use(express.json());
 	app.use(cors({
-		origin : ['http://footballapp.us-east-2.elasticbeanstalk.com']
+		origin : [ 'https://thawing-reaches-98761.herokuapp.com']
 	}));
 	startConncection(uri);
 	app.get('/' , function(req , res){
