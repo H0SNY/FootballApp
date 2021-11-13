@@ -3,6 +3,7 @@ import express from 'express';
 import { options, sleep } from '../helper.js';
 import { League } from '../models/league.model.js';
 import { Match } from '../models/match.model.js';
+import { API_ORIGIN , UPDATE_TOKEN} from '../apiTokens.js';
 export const matchRoute = express();
 
 //getters
@@ -89,14 +90,14 @@ matchRoute.route('/team').get(async (req , res) =>{
 //setters
 matchRoute.route('/update').post(async (req ,res) =>{
 	try{
-		const {update_token} = req.headers;
-		if(update_token !== process.env.UPDATE_TOKEN){
+		const {update_token : x} = req.headers;
+		if(x !== UPDATE_TOKEN){
 			res.status(403).json({valid : false , err : 'Invalid Update Token'})
 		}
 		const leagues = await League.find({});
 		console.log(`updating matches...`);
 		for(const league of leagues){
-			const matches = await axios.get(process.env.API_ORIGIN + `/v2/competitions/${league.id}/matches` , options);
+			const matches = await axios.get(API_ORIGIN + `/v2/competitions/${league.id}/matches` , options);
 			for(const match of matches.data.matches){
 				const time = String(new Date(match.utcDate)).split(' ')[4]
 				await Match.updateOne({leagueID : league.id , id : match.id } , 

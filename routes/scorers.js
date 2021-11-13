@@ -3,7 +3,7 @@ import express from 'express';
 import { options, sleep } from '../helper.js';
 import { League } from '../models/league.model.js';
 import { Scorers } from '../models/scorers.model.js';
-
+import { API_ORIGIN , UPDATE_TOKEN } from '../apiTokens.js';
 export const scorersRoute = express();
 
 //getters
@@ -25,15 +25,15 @@ scorersRoute.route('/').get(async (req , res) =>{
 //setters
 scorersRoute.route('/update').post(async (req , res) =>{
 	try{
-		const {update_token} = req.headers;
-		if(update_token !== process.env.UPDATE_TOKEN){
+		const {update_token : x} = req.headers;
+		if(x !== UPDATE_TOKEN){
 			res.status(403).json({valid : false , err : 'Invalid Update Token'});
 			return;
 		}
 		const leagues = await League.find({});
 		console.log(`updating scorers...`);
 		for(const league of leagues){
-			const scorers = await axios.get(process.env.API_ORIGIN + `/v2/competitions/${league.id}/scorers` , options);
+			const scorers = await axios.get(API_ORIGIN + `/v2/competitions/${league.id}/scorers` , options);
 			const res = await Scorers.updateOne({leagueID : league.id} , {$set : {leagueID : league.id , scorers : scorers.data.scorers}}
 				 , {upsert : true});
 				 await sleep(5000);

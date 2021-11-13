@@ -2,7 +2,7 @@ import express from 'express';
 import axios from 'axios';
 import { League } from '../models/league.model.js';
 import { options } from '../helper.js';
-
+import { API_ORIGIN , UPDATE_TOKEN } from '../apiTokens.js';
 
 
 
@@ -41,17 +41,17 @@ leagueRoute.route('/all').get(async (req , res) =>{
 //setters
 leagueRoute.route('/update').post(async (req, res) =>{
 	try{
-		const {update_token} = req.headers;
-		if(update_token !== process.env.UPDATE_TOKEN){
+		const {update_token : x} = req.headers;
+		if(x !== UPDATE_TOKEN){
 			res.status(403).json({valid : false , err : 'Invalid Update Token'})
 		}
-		const leagues = await axios.get(process.env.API_ORIGIN + '/v2/competitions/' ,options );
+		const leagues = await axios.get(API_ORIGIN + '/v2/competitions/' ,options );
 		for(const league of leagues.data.competitions){
 			if(league.plan === "TIER_ONE"){
 				const l = await League.findOne({id : league.id});
 				let logo = '';
 				if(l) logo = l.logo;
-				const res = await League.updateOne({id : league.id} , {$set : {...league , logo : logo}} , {upsert : true})
+				 await League.updateOne({id : league.id} , {$set : {...league , logo : logo}} , {upsert : true})
 			}
 		}
 		res.status(200).json({valid : true})

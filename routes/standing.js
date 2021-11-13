@@ -3,6 +3,7 @@ import express from 'express';
 import { options, sleep } from '../helper.js';
 import { League } from '../models/league.model.js';
 import { Standing } from '../models/standings.model.js';
+import { API_ORIGIN , UPDATE_TOKEN } from '../apiTokens.js';
 
 export const standingRoute = express();
 
@@ -27,8 +28,8 @@ standingRoute.route('/').get(async (req , res) =>{
 //setters
 standingRoute.route('/update').post(async (req , res) =>{
 	try{
-		const {update_token} = req.headers;
-		if(update_token !== process.env.UPDATE_TOKEN){
+		const {update_token : x} = req.headers;
+		if(x !== UPDATE_TOKEN){
 			res.status(403).json({valid : false , err : 'Invalid Update Token'});
 			return;
 		}
@@ -36,10 +37,10 @@ standingRoute.route('/update').post(async (req , res) =>{
 		console.log(`updating standings...`)
 		for(const league of leagues){
 			if(league.id === 2000) continue;
-			const standings = await axios.get(process.env.API_ORIGIN + `/v2/competitions/${league.id}/standings` ,options);
+			const standings = await axios.get(API_ORIGIN + `/v2/competitions/${league.id}/standings` ,options);
 			await sleep(10000);
 			for(const standing of standings.data.standings){
-				const res = await Standing.updateOne({leagueID : league.id , stage : standing.stage , group : standing.group} ,{
+				await Standing.updateOne({leagueID : league.id , stage : standing.stage , group : standing.group} ,{
 					$set : {...standing , leagueID : league.id} }, {upsert : true}
 					)
 				}

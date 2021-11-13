@@ -3,6 +3,7 @@ import express from 'express';
 import { options, sleep } from '../helper.js';
 import { League } from '../models/league.model.js';
 import { Team } from '../models/team.model.js';
+import {API_ORIGIN , UPDATE_TOKEN} from '../apiTokens';
 
 export const teamRoute = express();
 
@@ -27,20 +28,20 @@ teamRoute.route('/').get(async (req , res) =>{
 //setters
 teamRoute.route('/update').post(async (req , res) =>{
 	try{
-		const {update_token} = req.headers;
-		if(update_token !== process.env.UPDATE_TOKEN){
+		const {update_token : x} = req.headers;
+		if(x !== UPDATE_TOKEN){
 			res.status(403).json({valid : false , err : 'Invalid Update Token'});
 			return;
 		}
 		const leagues = await League.find({});
 		console.log(`updating teams...`)
 		for(const league of leagues){
-			const teams = await axios.get(process.env.API_ORIGIN + `/v2/competitions/${league.id}/teams` , options);
+			const teams = await axios.get(API_ORIGIN + `/v2/competitions/${league.id}/teams` , options);
 			await sleep(3000)
 			for(const team of teams.data.teams){
 				await sleep(8000);
-				const fullTeam = await axios.get(process.env.API_ORIGIN + `/v2/teams/${team.id}` , options);
-				const res = await Team.updateOne({id : team.id} , {$set : {...fullTeam.data}} , {upsert : true});
+				const fullTeam = await axios.get(API_ORIGIN + `/v2/teams/${team.id}` , options);
+				await Team.updateOne({id : team.id} , {$set : {...fullTeam.data}} , {upsert : true});
 			}
 		}
 		
