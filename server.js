@@ -1,14 +1,13 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import dotenv from 'dotenv'
+import {DB_URI} from './apiTokens';
 import { leagueRoute } from './routes/league.js';
 import { teamRoute } from './routes/team.js';
 import { standingRoute } from './routes/standing.js';
 import {matchRoute} from './routes/match.js'
 import { scorersRoute } from './routes/scorers.js';
 import {updateMatches , updateStandings , updateScorers , updateTeams} from './cron.js';
-dotenv.config();
 updateStandings();
 updateTeams();
 updateScorers();
@@ -26,7 +25,7 @@ const startConncection = async(uri) =>{
 
 }
 
-const uri = process.env.DB_URI;
+const uri = DB_URI;
 const port =  process.env.PORT || 8080;
 
 
