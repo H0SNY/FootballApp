@@ -1,6 +1,6 @@
 import axios from 'axios';
 import cron from 'node-cron'
-import { UPDATE_TOKEN } from './apiTokens';
+import { UPDATE_TOKEN } from './apiTokens.js';
 export function updateTeams(){
 	return ( cron.schedule('0 * * * *' , async function(){
 			 await axios.post('http://h0sny.us-east-2.elasticbeanstalk.com/team/update', null ,{
