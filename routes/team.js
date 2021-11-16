@@ -3,7 +3,7 @@ import express from 'express';
 import { options, sleep } from '../helper.js';
 import { League } from '../models/league.model.js';
 import { Team } from '../models/team.model.js';
-import {API_ORIGIN , UPDATE_TOKEN} from '../apiTokens';
+import {API_ORIGIN , UPDATE_TOKEN} from '../apiTokens.js';
 
 export const teamRoute = express();
 

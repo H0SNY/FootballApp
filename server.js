@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
-import {DB_URI} from './apiTokens';
+import {DB_URI} from './apiTokens.js';
 import { leagueRoute } from './routes/league.js';
 import { teamRoute } from './routes/team.js';
 import { standingRoute } from './routes/standing.js';
