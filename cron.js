@@ -1,9 +1,10 @@
 import axios from 'axios';
 import cron from 'node-cron'
 import { UPDATE_TOKEN } from './apiTokens.js';
+const origin = "https://radiant-plains-66499.herokuapp.com/"
 export function updateTeams(){
 	return ( cron.schedule('0 * * * *' , async function(){
-			 await axios.post('http://h0sny.us-east-2.elasticbeanstalk.com/team/update', null ,{
+			 await axios.post(origin, null ,{
 			headers : {
 				'update_token' : UPDATE_TOKEN
 			}
@@ -13,7 +14,7 @@ export function updateTeams(){
 }
 export function updateScorers(){
 	return(cron.schedule('10 * * * *' , async function(){
-			 await axios.post('http://h0sny.us-east-2.elasticbeanstalk.com/scorers/update' , null , {
+			 await axios.post(origin , null , {
 			headers : {
 				'update_token' : UPDATE_TOKEN
 			}
@@ -23,7 +24,7 @@ export function updateScorers(){
 }
 export function updateMatches(){
 	return(cron.schedule('20 * * * *' , async function(){
-		 await axios.post('http://h0sny.us-east-2.elasticbeanstalk.com/match/update' , null , {
+		 await axios.post(origin , null , {
 		headers : {
 			'update_token' : UPDATE_TOKEN
 		}
@@ -34,7 +35,7 @@ export function updateMatches(){
 }
 export function updateStandings(){
 	return(cron.schedule('30 * * * *' , async function(){
-			await axios.post('http://h0sny.us-east-2.elasticbeanstalk.com/standing/update' ,null , {
+			await axios.post(origin ,null , {
 			headers : {
 				'update_token' :UPDATE_TOKEN
 			}
