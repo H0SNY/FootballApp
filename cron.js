@@ -4,7 +4,7 @@ import { UPDATE_TOKEN } from './apiTokens.js';
 const origin = "https://radiant-plains-66499.herokuapp.com/"
 export function updateTeams(){
 	return ( cron.schedule('0 * * * *' , async function(){
-			 await axios.post(origin, null ,{
+			 await axios.post(origin + "team/update", null ,{
 			headers : {
 				'update_token' : UPDATE_TOKEN
 			}
@@ -14,7 +14,7 @@ export function updateTeams(){
 }
 export function updateScorers(){
 	return(cron.schedule('10 * * * *' , async function(){
-			 await axios.post(origin , null , {
+			 await axios.post(origin + "scorers/update", null , {
 			headers : {
 				'update_token' : UPDATE_TOKEN
 			}
@@ -24,7 +24,7 @@ export function updateScorers(){
 }
 export function updateMatches(){
 	return(cron.schedule('20 * * * *' , async function(){
-		 await axios.post(origin , null , {
+		 await axios.post(origin + "match/update" , null , {
 		headers : {
 			'update_token' : UPDATE_TOKEN
 		}
@@ -35,7 +35,7 @@ export function updateMatches(){
 }
 export function updateStandings(){
 	return(cron.schedule('30 * * * *' , async function(){
-			await axios.post(origin ,null , {
+			await axios.post(origin + "standing/update",null , {
 			headers : {
 				'update_token' :UPDATE_TOKEN
 			}
